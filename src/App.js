@@ -9,8 +9,8 @@ const App = () => {
   const [quotesByAuthor, setQuotesByAuthor] = useState(null);
 
   // Get random quote
-  const getRandomQuote = () => {
-    axios
+  const getRandomQuote = async () => {
+    await axios
       .get('https://quote-garden.herokuapp.com/api/v3/quotes/random')
       .then((res) => {
         const randomQuote = res.data.data[0];
