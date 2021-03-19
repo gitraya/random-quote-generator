@@ -1,35 +1,84 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import RandomQuote from './components/RandomQuote';
+import QuotesAuthor from './components/QuotesAuthor';
 
-function App() {
+const App = () => {
+  // Quotes state
   const [quoteData, setQuoteData] = useState(null);
-  const getQuote = () => {
+  const [quotesByAuthor, setQuotesByAuthor] = useState(null);
+
+  // Get random quote
+  const getRandomQuote = () => {
     axios
       .get('https://quote-garden.herokuapp.com/api/v3/quotes/random')
       .then((res) => {
-        const quoteDataAxios = res.data.data[0];
-        setQuoteData(quoteDataAxios);
+        const randomQuote = res.data.data[0];
+        setQuoteData(randomQuote);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setQuotesByAuthor(null);
+  };
+
+  // Get all quotes by author
+  const getQuotesByAuthor = () => {
+    axios
+      .get('https://quote-garden.herokuapp.com/api/v3/quotes', {
+        params: {
+          author: quoteData.quoteAuthor,
+        },
+      })
+      .then((res) => {
+        const quotesAuthor = res.data.data;
         console.log(res);
-        console.log(quoteData);
+        setQuotesByAuthor(quotesAuthor);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  // Displaying quotes data to the component
+  const displayQuotes = () => {
+    if (quotesByAuthor)
+      return (
+        <div>
+          <div className="quote-author-name">
+            <h1>{quoteData.quoteAuthor}</h1>
+          </div>
+          <QuotesAuthor quotesByAuthor={quotesByAuthor} />
+        </div>
+      );
+    if (quoteData)
+      return (
+        <RandomQuote
+          quoteData={quoteData}
+          getQuotesByAuthor={getQuotesByAuthor}
+        />
+      );
+  };
+
   useEffect(() => {
     if (!quoteData) {
-      getQuote();
+      getRandomQuote();
     }
   }, []);
 
   return (
     <div className="App">
       <header className="App-header">
-        <button className="btn-call-random-quote">
-          {`random ${(<i class="material-icons-round">autorenew</i>)}`}
+        <button
+          className="btn-call-random-quote"
+          type="button"
+          onClick={getRandomQuote}
+        >
+          {`random `}
+          <i className="material-icons-round">autorenew</i>
         </button>
       </header>
+      <main className="App-main">{displayQuotes()}</main>
       <footer className="App-footer">
         <small className="copyright">
           {`created by `}
@@ -47,6 +96,6 @@ function App() {
       </footer>
     </div>
   );
-}
+};
 
 export default App;
