@@ -35,6 +35,7 @@
 
 - I learned how to apply the load indicator
 - I learned how to get data from API using Axios
+- [Quotes from this site comes from the Quote Garden](https://pprathameshmore.github.io/QuoteGarden/)
 
 ### Built With
 
