@@ -22,11 +22,31 @@ body {
   padding: 0 15%;
 }
 
+.loaders {
+  display: flex;
+  justify-content: center;
+}
+
 /* Header style */
 .App-header {
   display: flex;
   justify-content: flex-end;
   margin: 1rem 0;
+}
+
+@media screen and (max-width: 5000px) and (min-width: 1800px) {
+  .App {
+    padding: 0 25%;
+  }
+  .App-header {
+    margin: 2rem 0;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .App {
+    padding: 0 10%;
+  }
 }
 
 /* Button style for call a random quote */
@@ -101,6 +121,12 @@ body {
   margin-top: 4rem;
   padding-left: 8%;
 }
+@media screen and (max-width: 768px) {
+  .wrap-random-author {
+    margin-top: 3rem;
+  }
+}
+
 .btn-call-quotes {
   width: 100%;
   padding: 2rem 3%;
@@ -155,4 +181,17 @@ body {
 .copyright a {
   color: var(--gray-light);
   text-decoration: none;
+}
+
+/* Mobile screen style */
+@media screen and (max-width: 540px) {
+  .App {
+    padding: 0 5%;
+  }
+  .random-quote-text q {
+    font-size: 1.5rem;
+  }
+  .quote-author-name h1 {
+    font-size: 1.8rem;
+  }
 }

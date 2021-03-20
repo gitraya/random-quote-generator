@@ -2,14 +2,23 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import RandomQuote from './components/RandomQuote';
 import QuotesAuthor from './components/QuotesAuthor';
+import { useLoading } from '@agney/react-loading';
 
 const App = () => {
   // Quotes state
   const [quoteData, setQuoteData] = useState(null);
   const [quotesByAuthor, setQuotesByAuthor] = useState(null);
+  const [loadDone, setLoadDone] = useState(null);
+  const { containerProps, indicatorEl } = useLoading({
+    loading: true,
+    loaderProps: {
+      valueText: 'Fetching quote from Quote Garden',
+    },
+  });
 
   // Get random quote
   const getRandomQuote = async () => {
+    setLoadDone(false);
     await axios
       .get('https://quote-garden.herokuapp.com/api/v3/quotes/random')
       .then((res) => {
@@ -19,12 +28,14 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
+    setLoadDone(true);
     setQuotesByAuthor(null);
   };
 
   // Get all quotes by author
-  const getQuotesByAuthor = () => {
-    axios
+  const getQuotesByAuthor = async () => {
+    setLoadDone(false);
+    await axios
       .get('https://quote-garden.herokuapp.com/api/v3/quotes', {
         params: {
           author: quoteData.quoteAuthor,
@@ -38,10 +49,17 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
+    setLoadDone(true);
   };
 
   // Displaying quotes data to the component
   const displayQuotes = () => {
+    if (!loadDone)
+      return (
+        <div className="loaders" {...containerProps}>
+          {indicatorEl}
+        </div>
+      );
     if (quotesByAuthor)
       return (
         <div>
