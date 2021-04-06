@@ -17,25 +17,25 @@ const App = () => {
   });
 
   // Get random quote
-  const getRandomQuote = async () => {
+  const getRandomQuote = () => {
     setLoadDone(false);
-    await axios
+    axios
       .get('https://quote-garden.herokuapp.com/api/v3/quotes/random')
       .then((res) => {
         const randomQuote = res.data.data[0];
         setQuoteData(randomQuote);
+        setLoadDone(true);
+        setQuotesByAuthor(null);
       })
       .catch((err) => {
         console.log(err);
       });
-    setLoadDone(true);
-    setQuotesByAuthor(null);
   };
 
   // Get all quotes by author
-  const getQuotesByAuthor = async () => {
+  const getQuotesByAuthor = () => {
     setLoadDone(false);
-    await axios
+    axios
       .get('https://quote-garden.herokuapp.com/api/v3/quotes', {
         params: {
           author: quoteData.quoteAuthor,
@@ -45,11 +45,11 @@ const App = () => {
         const quotesAuthor = res.data.data;
         console.log(res);
         setQuotesByAuthor(quotesAuthor);
+        setLoadDone(true);
       })
       .catch((err) => {
         console.log(err);
       });
-    setLoadDone(true);
   };
 
   // Displaying quotes data to the component
@@ -82,7 +82,7 @@ const App = () => {
     if (!quoteData) {
       getRandomQuote();
     }
-  }, []);
+  }, [quoteData]);
 
   return (
     <div className="App">
